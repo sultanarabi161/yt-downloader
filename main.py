@@ -89,33 +89,52 @@ def download_youtube_content(url, quality, format_type, audio_quality='192'):
         
         # Configure yt-dlp options based on format type
         if format_type == 'audio':
-            output_template = os.path.join(temp_dir, f'%(title)s.%(ext)s')
+            # For audio, create a specific filename
+            safe_title = get_safe_filename(info.get('title', 'Unknown'))
+            output_template = os.path.join(temp_dir, f'{safe_title}_audio.%(ext)s')
             ydl_opts = {
-                'format': 'bestaudio[acodec!=none]/best[acodec!=none]',
+                'format': 'bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]',
                 'outtmpl': output_template,
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
                     'preferredquality': str(audio_quality),
                 }],
-                'postprocessor_args': [
-                    '-ar', '44100',  # Set sample rate
-                    '-ac', '2',      # Set to stereo
-                ],
                 'progress_hooks': [progress_hook],
                 'quiet': True,
                 'no_warnings': True,
-                'restrictfilenames': True,  # Make filename safe
+                'restrictfilenames': True,
+                'prefer_ffmpeg': True,
+                'keepvideo': False,
             }
         else:
-            output_template = os.path.join(temp_dir, f'%(title)s.%(ext)s')
+            # For video, create a specific filename with quality info
+            safe_title = get_safe_filename(info.get('title', 'Unknown'))
+            quality_suffix = quality.split('[')[1].split(']')[0] if '[' in quality and ']' in quality else 'video'
+            output_template = os.path.join(temp_dir, f'{safe_title}_{quality_suffix}.%(ext)s')
             ydl_opts = {
                 'format': quality,
                 'outtmpl': output_template,
                 'progress_hooks': [progress_hook],
                 'quiet': True,
-                'restrictfilenames': True,  # Make filename safe
+                'restrictfilenames': True,
+                'merge_output_format': 'mp4',
+                'prefer_ffmpeg': True,
             }
+        
+        # Set ffmpeg path if available
+        try:
+            import subprocess
+            ffmpeg_path = subprocess.check_output(['which', 'ffmpeg'], text=True).strip()
+            ydl_opts['ffmpeg_location'] = ffmpeg_path
+        except:
+            # Try common paths
+            for path in ['/usr/bin/ffmpeg', '/usr/local/bin/ffmpeg', '/nix/store/*/bin/ffmpeg']:
+                import glob
+                matches = glob.glob(path)
+                if matches:
+                    ydl_opts['ffmpeg_location'] = matches[0]
+                    break
         
         # Download the content
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -164,9 +183,20 @@ def index():
 def download_video():
     try:
         url = request.form.get('url', '').strip()
-        quality = request.form.get('quality', 'best[height<=720]/best')
+        quality_param = request.form.get('quality', 'best[height<=720]/best')
         format_type = request.form.get('format_type', 'video')
         audio_quality = request.form.get('audio_quality', '192')
+        
+        # Map quality for web interface
+        web_quality_mapping = {
+            'best[height<=720]/best': 'best[height<=720]/bestvideo[height<=720]+bestaudio/best',
+            'best[height<=1080]/best': 'best[height<=1080]/bestvideo[height<=1080]+bestaudio/best',
+            'best[height<=480]/best': 'best[height<=480]/bestvideo[height<=480]+bestaudio/best',
+            'best[height<=360]/best': 'best[height<=360]/bestvideo[height<=360]+bestaudio/best',
+            'worst': 'worst/bestvideo+bestaudio'
+        }
+        
+        quality = web_quality_mapping.get(quality_param, quality_param)
         
         # Validate YouTube URL
         if not url or not is_valid_youtube_url(url):
@@ -319,15 +349,15 @@ def api_download():
         # Map simplified quality names to yt-dlp format strings
         quality_mapping = {
             # Video qualities
-            '4k': 'best[height<=2160]',
-            '2160p': 'best[height<=2160]',
-            '1080p': 'best[height<=1080]',
-            '720p': 'best[height<=720]',
-            '480p': 'best[height<=480]',
-            '360p': 'best[height<=360]',
-            '240p': 'best[height<=240]',
-            'worst': 'worst',
-            'best': 'best'
+            '4k': 'best[height<=2160]/best',
+            '2160p': 'best[height<=2160]/best',
+            '1080p': 'best[height<=1080]/best',
+            '720p': 'best[height<=720]/best',
+            '480p': 'best[height<=480]/best',
+            '360p': 'best[height<=360]/best',
+            '240p': 'best[height<=240]/best',
+            'worst': 'worst/bestvideo+bestaudio',
+            'best': 'best/bestvideo+bestaudio'
         }
         
         # Audio quality mapping - extract just the number
@@ -350,8 +380,8 @@ def api_download():
         if download_format == 'video':
             quality = quality_mapping.get(quality_param, quality_param)
             # Fallback to a working format if invalid
-            if not any(x in quality for x in ['best', 'worst', 'height']):
-                quality = 'best[height<=720]/best'
+            if not any(x in quality for x in ['best', 'worst', 'height', 'bestvideo']):
+                quality = 'best[height<=720]/bestvideo+bestaudio/best'
         else:
             # For audio, extract number from quality string and validate
             if quality_param.endswith('kbps'):
@@ -363,7 +393,7 @@ def api_download():
             if not audio_quality.isdigit():
                 audio_quality = '192'  # Default fallback
             
-            quality = 'bestaudio[acodec!=none]/best[acodec!=none]'
+            quality = 'bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio/best[acodec!=none]'
         
         # Validate parameters
         if not url:
