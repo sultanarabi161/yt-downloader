@@ -86,15 +86,20 @@ def download_youtube_content(url, quality, format_type, audio_quality='192'):
         if format_type == 'audio':
             output_template = os.path.join(temp_dir, f'{video_title}_audio_{timestamp}.%(ext)s')
             ydl_opts = {
-                'format': 'bestaudio/best',
+                'format': 'bestaudio[acodec!=none]/best[acodec!=none]',
                 'outtmpl': output_template,
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
-                    'preferredquality': audio_quality,
+                    'preferredquality': str(audio_quality),
                 }],
+                'postprocessor_args': [
+                    '-ar', '44100',  # Set sample rate
+                    '-ac', '2',      # Set to stereo
+                ],
                 'progress_hooks': [progress_hook],
                 'quiet': True,
+                'no_warnings': True,
             }
         else:
             output_template = os.path.join(temp_dir, f'{video_title}_video_{timestamp}.%(ext)s')
@@ -313,29 +318,43 @@ def api_download():
             '360p': 'best[height<=360]/best',
             '240p': 'best[height<=240]/best',
             'worst': 'worst',
-            'best': 'best'
+            'best': 'best[height<=720]/best'  # Default to 720p for better compatibility
         }
         
-        # Audio quality mapping
+        # Audio quality mapping - extract just the number
         audio_quality_mapping = {
             '320kbps': '320',
             '256kbps': '256', 
             '192kbps': '192',
             '128kbps': '128',
             '96kbps': '96',
-            '64kbps': '64'
+            '64kbps': '64',
+            '320': '320',
+            '256': '256',
+            '192': '192', 
+            '128': '128',
+            '96': '96',
+            '64': '64'
         }
         
         # Convert quality parameter
         if download_format == 'video':
             quality = quality_mapping.get(quality_param, quality_param)
+            # Fallback to a working format if invalid
+            if not any(x in quality for x in ['best', 'worst', 'height']):
+                quality = 'best[height<=720]/best'
         else:
-            # For audio, extract number from quality string
+            # For audio, extract number from quality string and validate
             if quality_param.endswith('kbps'):
-                audio_quality = audio_quality_mapping.get(quality_param, quality_param.replace('kbps', ''))
+                audio_quality = audio_quality_mapping.get(quality_param, '192')
             else:
-                audio_quality = quality_param
-            quality = 'bestaudio/best'
+                audio_quality = audio_quality_mapping.get(quality_param, quality_param)
+            
+            # Ensure audio_quality is just a number
+            if not audio_quality.isdigit():
+                audio_quality = '192'  # Default fallback
+            
+            quality = 'bestaudio[acodec!=none]/best[acodec!=none]'
         
         # Validate parameters
         if not url:

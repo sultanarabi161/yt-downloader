@@ -122,25 +122,25 @@ GET /api/video-info?url=https://youtu.be/VIDEO_ID
 **Video Download Examples:**
 ```bash
 # 720p HD Video
-GET /api/download?url=https://youtu.be/VIDEO_ID&type=video&quality=best[height<=720]/best
+GET /api/download?url=https://youtu.be/VIDEO_ID&type=video&quality=720p
 
 # 1080p Full HD Video
-GET /api/download?url=https://youtu.be/VIDEO_ID&type=video&quality=best[height<=1080]/best
+GET /api/download?url=https://youtu.be/VIDEO_ID&type=video&quality=1080p
 
 # 4K Video
-GET /api/download?url=https://youtu.be/VIDEO_ID&type=video&quality=best[height<=2160]/best
+GET /api/download?url=https://youtu.be/VIDEO_ID&type=video&quality=4k
 ```
 
 **Audio Download Examples:**
 ```bash
 # Standard Quality Audio (192 kbps)
-GET /api/download?url=https://youtu.be/VIDEO_ID&type=audio&audio_quality=192
+GET /api/download?url=https://youtu.be/VIDEO_ID&type=audio&quality=192kbps
 
 # High Quality Audio (320 kbps)
-GET /api/download?url=https://youtu.be/VIDEO_ID&type=audio&audio_quality=320
+GET /api/download?url=https://youtu.be/VIDEO_ID&type=audio&quality=320kbps
 
 # Low Quality Audio (128 kbps)
-GET /api/download?url=https://youtu.be/VIDEO_ID&type=audio&audio_quality=128
+GET /api/download?url=https://youtu.be/VIDEO_ID&type=audio&quality=128kbps
 ```
 
 ### 5. Download Information
