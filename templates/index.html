@@ -15,7 +15,6 @@
             <div class="logo">
                 <i class="fab fa-youtube"></i>
                 <span>YT-Downloader</span>
-                <small style="font-size: 0.8em; opacity: 0.8;">by Sultan Arabi</small>
             </div>
             <nav class="nav">
                 <a href="#features">Features</a>
@@ -118,64 +117,26 @@
         <!-- API Documentation -->
         <section id="api-info" class="api-info">
             <div class="container">
-                <h2>🚀 Developer API Documentation</h2>
-                <p>Integrate YouTube downloading functionality into your applications with our RESTful API.</p>
-                
-                <div class="api-overview">
-                    <div class="api-features">
-                        <h3>📡 API Features</h3>
-                        <ul>
-                            <li>✅ Download videos in multiple resolutions (240p to 4K)</li>
-                            <li>✅ Extract audio in various bitrates (64kbps to 320kbps)</li>
-                            <li>✅ Get video metadata without downloading</li>
-                            <li>✅ Support for both youtu.be and youtube.com URLs</li>
-                            <li>✅ JSON responses with error handling</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="api-endpoints">
-                        <h3>🔗 Main Endpoints</h3>
-                        <div class="endpoint">
-                            <code>GET /api/download</code>
-                            <p>Download video or audio content</p>
-                        </div>
-                        <div class="endpoint">
-                            <code>GET /api/video-info</code>
-                            <p>Get video metadata and information</p>
-                        </div>
-                        <div class="endpoint">
-                            <code>GET /api/formats</code>
-                            <p>List all available quality options</p>
-                        </div>
-                    </div>
-                </div>
+                <h2>🚀 API Documentation</h2>
+                <p>Simple API for YouTube video and audio downloads.</p>
                 
                 <div class="api-examples">
-                    <h3>💻 Quick Examples</h3>
+                    <h3>Quick Examples</h3>
                     <div class="example-tabs">
                         <div class="example">
-                            <h4>Download 720p Video</h4>
-                            <code class="api-url">/api/download?url=https://youtu.be/VIDEO_ID&format=video&quality=720p</code>
+                            <h4>Download Video</h4>
+                            <code class="api-url">/api/download?url=https://youtu.be/VIDEO_ID&type=video&quality=720p</code>
                         </div>
                         <div class="example">
-                            <h4>Download MP3 Audio (192kbps)</h4>
-                            <code class="api-url">/api/download?url=https://youtu.be/VIDEO_ID&format=audio&quality=192kbps</code>
-                        </div>
-                        <div class="example">
-                            <h4>Get Video Information</h4>
-                            <code class="api-url">/api/video-info?url=https://youtu.be/VIDEO_ID</code>
+                            <h4>Download Audio</h4>
+                            <code class="api-url">/api/download?url=https://youtu.be/VIDEO_ID&type=audio&quality=192kbps</code>
                         </div>
                     </div>
                 </div>
                 
                 <div class="api-quick-links">
-                    <a href="/api/info" target="_blank" class="api-link">📡 API Information</a>
-                    <a href="/api/formats" target="_blank" class="api-link">📋 Available Formats</a>
-                    <a href="#" onclick="copyApiUrl()" class="api-link">📋 Copy Base URL</a>
-                </div>
-                
-                <div class="api-note">
-                    <p><strong>Note:</strong> Replace <code>VIDEO_ID</code> with actual YouTube video ID. All downloads are temporary and auto-deleted after 60 seconds.</p>
+                    <a href="/api/info" target="_blank" class="api-link">API Info</a>
+                    <a href="/api/formats" target="_blank" class="api-link">Available Formats</a>
                 </div>
             </div>
         </section>
