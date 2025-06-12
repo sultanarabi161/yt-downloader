@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT-Downloader - YouTube Video & Audio Downloader API</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fab fa-youtube"></i>
+                <span>YT-Downloader</span>
+                <small style="font-size: 0.8em; opacity: 0.8;">by Sultan Arabi</small>
+            </div>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="hero">
+                <h1>Download YouTube Videos in High Quality</h1>
+                <p>Fast, free, and secure YouTube video downloader with multiple quality options</p>
+            </div>
+
+            <div class="download-section">
+                <form id="downloadForm" class="download-form">
+                    <div class="input-group">
+                        <input type="text" name="url" id="urlInput" placeholder="Paste YouTube video URL here..." required>
+                        <button type="submit" id="downloadBtn">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </button>
+                    </div>
+
+                    <div class="options">
+                        <div class="quality-options">
+                            <label>Video Quality:</label>
+                            <select name="quality" id="qualitySelect">
+                                <option value="best[height<=720]/best">720p HD (Recommended)</option>
+                                <option value="best[height<=1080]/best">1080p Full HD</option>
+                                <option value="best[height<=480]/best">480p Standard</option>
+                                <option value="best[height<=360]/best">360p Mobile</option>
+                                <option value="worst">Lowest Quality (Fast Download)</option>
+                            </select>
+                        </div>
+
+                        <div class="format-options">
+                            <label>Download Type:</label>
+                            <select name="format_type" id="formatSelect">
+                                <option value="video">Video + Audio</option>
+                                <option value="audio">Audio Only (MP3)</option>
+                            </select>
+                        </div>
+
+                        <div class="audio-quality-options" id="audioQualityOptions" style="display: none;">
+                            <label>Audio Quality:</label>
+                            <select name="audio_quality" id="audioQualitySelect">
+                                <option value="320">320 kbps (Highest)</option>
+                                <option value="256">256 kbps (High)</option>
+                                <option value="192" selected>192 kbps (Standard)</option>
+                                <option value="128">128 kbps (Medium)</option>
+                                <option value="96">96 kbps (Low)</option>
+                                <option value="64">64 kbps (Lowest)</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Processing your download... Please wait</p>
+                </div>
+
+                <div id="result" class="result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Why Choose Our Downloader?</h2>
+                <div class="features-grid">
+                    <div class="feature">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Lightning Fast</h3>
+                        <p>Download videos quickly with our optimized servers</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-hd-video"></i>
+                        <h3>High Quality</h3>
+                        <p>Support for HD, Full HD, and multiple quality options</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-music"></i>
+                        <h3>Audio Downloads</h3>
+                        <p>Extract audio in MP3 format from any YouTube video</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>100% Safe</h3>
+                        <p>No malware, no ads, completely secure downloads</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Documentation -->
+        <section id="api-docs" class="api-docs">
+            <div class="container">
+                <h2>🔥 API Documentation - YT-Downloader v2.0.0</h2>
+                <div class="api-info">
+                    <div class="api-endpoint">
+                        <h3>📡 Base URL</h3>
+                        <code>https://b3641b15-7c7f-4faf-99e3-9385ee6809ea-00-3un297oeqwzvx.sisko.replit.dev/api</code>
+                        <p><strong>Developer:</strong> Sultan Arabi | <strong>API Version:</strong> v1</p>
+                    </div>
+                    
+                    <div class="api-endpoints">
+                        <div class="endpoint">
+                            <h4>ℹ️ API Information</h4>
+                            <code>GET /api/info</code>
+                            <p>Get API version, developer info, endpoints list and usage examples</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>📋 Available Formats & Qualities</h4>
+                            <code>GET /api/formats</code>
+                            <p>Get all available video qualities (4K, 1080p, 720p, etc.) and audio qualities (320kbps, 192kbps, etc.)</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>🔍 Get Video Information</h4>
+                            <code>GET /api/video-info?url=https://youtu.be/VIDEO_ID</code>
+                            <p>Get video title, duration, uploader, views, thumbnail and other metadata</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>⬇️ Download Video (720p HD)</h4>
+                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=video&quality=720p</code>
+                            <p>Download video in 720p HD quality (recommended)</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>🎬 Download Video (1080p Full HD)</h4>
+                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=video&quality=1080p</code>
+                            <p>Download video in 1080p Full HD quality</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>🎵 Download Audio (320kbps)</h4>
+                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=audio&quality=320kbps</code>
+                            <p>Download audio in highest quality MP3 format (320kbps)</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>🎶 Download Audio (192kbps)</h4>
+                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=audio&quality=192kbps</code>
+                            <p>Download audio in standard quality MP3 format (192kbps)</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>📄 Download Information</h4>
+                            <code>GET /api/download-info?url=https://youtu.be/VIDEO_ID&format=video&quality=720p</code>
+                            <p>Get download information without actually downloading the file</p>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <h3>🎯 Available Video Qualities</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <code>4k</code>
+                            <code>2160p</code>
+                            <code>1080p</code>
+                            <code>720p</code>
+                            <code>480p</code>
+                            <code>360p</code>
+                            <code>240p</code>
+                            <code>best</code>
+                            <code>worst</code>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <h3>🎵 Available Audio Qualities</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <code>320kbps</code>
+                            <code>256kbps</code>
+                            <code>192kbps</code>
+                            <code>128kbps</code>
+                            <code>96kbps</code>
+                            <code>64kbps</code>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <h3>💡 Real Working Examples</h3>
+                        <div class="endpoint">
+                            <h4>🎬 Download Rick Roll Video (720p)</h4>
+                            <code>GET /api/download?url=https://youtu.be/dQw4w9WgXcQ&format=video&quality=720p</code>
+                            <p>Download the famous Rick Roll video in 720p quality</p>
+                        </div>
+                        
+                        <div class="endpoint">
+                            <h4>🎵 Download Rick Roll Audio (320kbps)</h4>
+                            <code>GET /api/download?url=https://youtu.be/dQw4w9WgXcQ&format=audio&quality=320kbps</code>
+                            <p>Download Rick Roll audio in highest quality MP3</p>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <h3>⚠️ Important Notes</h3>
+                        <ul style="text-align: left; padding-left: 2rem; color: #666;">
+                            <li>✅ Files are automatically named with video title</li>
+                            <li>✅ Both short (youtu.be) and long (youtube.com) URLs supported</li>
+                            <li>✅ Audio files converted to MP3 format</li>
+                            <li>✅ Video files maintain original format (usually MP4)</li>
+                            <li>⚡ Files auto-delete after 60 seconds for security</li>
+                            <li>🚀 API supports CORS for web applications</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2>How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Copy URL</h3>
+                        <p>Copy the YouTube video URL from your browser</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Choose Quality</h3>
+                        <p>Select your preferred video quality and format</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Download</h3>
+                        <p>Click download and save the file to your device</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YT-Downloader v2.0.0</h3>
+                    <p>Advanced YouTube video & audio downloader with API support. Developed by Sultan Arabi.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Features</h3>
+                    <ul>
+                        <li><a href="#">HD Video Downloads</a></li>
+                        <li><a href="#">Audio Extraction</a></li>
+                        <li><a href="#">Multiple Formats</a></li>
+                        <li><a href="#">Fast Processing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section" id="contact">
+                    <h3>Contact Info</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> info@ytdownloader.com</p>
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Digital City</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 YT-Downloader by Sultan Arabi. All rights reserved.</p>
+                <p>This tool is for personal use only. Please respect copyright laws.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Show/hide audio quality options based on format selection
+        document.getElementById('formatSelect').addEventListener('change', function() {
+            const audioQualityOptions = document.getElementById('audioQualityOptions');
+            if (this.value === 'audio') {
+                audioQualityOptions.style.display = 'block';
+            } else {
+                audioQualityOptions.style.display = 'none';
+            }
+        });
+
+        document.getElementById('downloadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const url = document.getElementById('urlInput').value.trim();
+            const quality = document.getElementById('qualitySelect').value;
+            const formatType = document.getElementById('formatSelect').value;
+            const audioQuality = document.getElementById('audioQualitySelect').value;
+            
+            // Validate YouTube URL
+            if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                alert('Please enter a valid YouTube URL!');
+                return false;
+            }
+            
+            // Show loading state
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('downloadBtn').disabled = true;
+            document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            document.getElementById('result').style.display = 'none';
+            
+            // Create FormData
+            const formData = new FormData();
+            formData.append('url', url);
+            formData.append('quality', quality);
+            formData.append('format_type', formatType);
+            formData.append('audio_quality', audioQuality);
+            
+            // Submit form via fetch
+            fetch('/download', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error || 'Download failed');
+                    });
+                }
+            })
+            .then(blob => {
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'video'; // Browser will use filename from Content-Disposition header
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                
+                // Show success message
+                document.getElementById('result').innerHTML = '<div class="success">✅ Download started successfully!</div>';
+                document.getElementById('result').style.display = 'block';
+            })
+            .catch(error => {
+                // Show error message
+                document.getElementById('result').innerHTML = '<div class="error">❌ ' + error.message + '</div>';
+                document.getElementById('result').style.display = 'block';
+            })
+            .finally(() => {
+                // Reset button state
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('downloadBtn').disabled = false;
+                document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-download"></i> Download';
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
