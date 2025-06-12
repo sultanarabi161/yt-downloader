@@ -21,7 +21,13 @@ PROJECT_INFO = {
     "developer": "Sultan Arabi",
     "api_version": "v1",
     "description": "YouTube Video & Audio Downloader API",
-    "last_updated": "2025-01-12"
+    "last_updated": "2025-01-12",
+    "contact": {
+        "email": "sultanarabi161@gmail.com",
+        "phone": "+880 1780982161",
+        "github": "https://github.com/sultanarabi161",
+        "social": "@sultanarabi161"
+    }
 }
 
 # Global variable to store download progress

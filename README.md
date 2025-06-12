@@ -137,7 +137,12 @@ curl -O -J "http://your-repl-url.replit.dev/api/download?url=https://youtu.be/VI
 - Files auto-delete after 60 seconds
 - Supports both youtu.be and youtube.com URLs
 
-## 📞 Support
-Developer: Sultan Arabi  
-Project: YT-Downloader v2.0.0  
-API Version: v1
+## 📞 Support & Contact
+**Developer:** Sultan Arabi  
+**Email:** sultanarabi161@gmail.com  
+**Phone:** +880 1780982161  
+**GitHub:** https://github.com/sultanarabi161  
+**Social Media:** @sultanarabi161  
+
+**Project:** YT-Downloader v2.0.0  
+**API Version:** v1
