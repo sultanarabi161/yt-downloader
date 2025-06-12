@@ -84,7 +84,7 @@ def download_youtube_content(url, quality, format_type, audio_quality='192'):
         
         # Configure yt-dlp options based on format type
         if format_type == 'audio':
-            output_template = os.path.join(temp_dir, f'{video_title}_audio_{timestamp}.%(ext)s')
+            output_template = os.path.join(temp_dir, f'%(title)s.%(ext)s')
             ydl_opts = {
                 'format': 'bestaudio[acodec!=none]/best[acodec!=none]',
                 'outtmpl': output_template,
@@ -100,14 +100,16 @@ def download_youtube_content(url, quality, format_type, audio_quality='192'):
                 'progress_hooks': [progress_hook],
                 'quiet': True,
                 'no_warnings': True,
+                'restrictfilenames': True,  # Make filename safe
             }
         else:
-            output_template = os.path.join(temp_dir, f'{video_title}_video_{timestamp}.%(ext)s')
+            output_template = os.path.join(temp_dir, f'%(title)s.%(ext)s')
             ydl_opts = {
                 'format': quality,
                 'outtmpl': output_template,
                 'progress_hooks': [progress_hook],
                 'quiet': True,
+                'restrictfilenames': True,  # Make filename safe
             }
         
         # Download the content
@@ -117,18 +119,20 @@ def download_youtube_content(url, quality, format_type, audio_quality='192'):
             # Find the downloaded file
             downloaded_files = []
             for file in os.listdir(temp_dir):
-                if video_title in file and (timestamp in file or file.endswith('.mp3') or file.endswith('.mp4')):
-                    downloaded_files.append(os.path.join(temp_dir, file))
+                file_path = os.path.join(temp_dir, file)
+                if os.path.isfile(file_path):
+                    downloaded_files.append(file_path)
             
             if downloaded_files:
                 file_path = downloaded_files[0]
                 file_size = os.path.getsize(file_path)
+                original_filename = os.path.basename(file_path)
                 
                 return {
                     'success': True,
                     'file_path': file_path,
-                    'filename': os.path.basename(file_path),
-                    'title': video_title,
+                    'filename': original_filename,
+                    'title': info.get('title', 'Unknown'),  # Use original title
                     'duration': duration,
                     'uploader': uploader,
                     'file_size': file_size,
@@ -310,15 +314,15 @@ def api_download():
         # Map simplified quality names to yt-dlp format strings
         quality_mapping = {
             # Video qualities
-            '4k': 'best[height<=2160]/best',
-            '2160p': 'best[height<=2160]/best',
-            '1080p': 'best[height<=1080]/best',
-            '720p': 'best[height<=720]/best',
-            '480p': 'best[height<=480]/best',
-            '360p': 'best[height<=360]/best',
-            '240p': 'best[height<=240]/best',
+            '4k': 'best[height<=2160]',
+            '2160p': 'best[height<=2160]',
+            '1080p': 'best[height<=1080]',
+            '720p': 'best[height<=720]',
+            '480p': 'best[height<=480]',
+            '360p': 'best[height<=360]',
+            '240p': 'best[height<=240]',
             'worst': 'worst',
-            'best': 'best[height<=720]/best'  # Default to 720p for better compatibility
+            'best': 'best'
         }
         
         # Audio quality mapping - extract just the number

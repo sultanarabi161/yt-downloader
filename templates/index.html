@@ -115,120 +115,15 @@
             </div>
         </section>
 
-        <!-- API Documentation -->
-        <section id="api-docs" class="api-docs">
+        <!-- API Quick Info -->
+        <section id="api-info" class="api-info">
             <div class="container">
-                <h2>🔥 API Documentation - YT-Downloader v2.0.0</h2>
-                <div class="api-info">
-                    <div class="api-endpoint">
-                        <h3>📡 Base URL</h3>
-                        <code>https://b3641b15-7c7f-4faf-99e3-9385ee6809ea-00-3un297oeqwzvx.sisko.replit.dev/api</code>
-                        <p><strong>Developer:</strong> Sultan Arabi | <strong>API Version:</strong> v1</p>
-                    </div>
-                    
-                    <div class="api-endpoints">
-                        <div class="endpoint">
-                            <h4>ℹ️ API Information</h4>
-                            <code>GET /api/info</code>
-                            <p>Get API version, developer info, endpoints list and usage examples</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>📋 Available Formats & Qualities</h4>
-                            <code>GET /api/formats</code>
-                            <p>Get all available video qualities (4K, 1080p, 720p, etc.) and audio qualities (320kbps, 192kbps, etc.)</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>🔍 Get Video Information</h4>
-                            <code>GET /api/video-info?url=https://youtu.be/VIDEO_ID</code>
-                            <p>Get video title, duration, uploader, views, thumbnail and other metadata</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>⬇️ Download Video (720p HD)</h4>
-                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=video&quality=720p</code>
-                            <p>Download video in 720p HD quality (recommended)</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>🎬 Download Video (1080p Full HD)</h4>
-                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=video&quality=1080p</code>
-                            <p>Download video in 1080p Full HD quality</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>🎵 Download Audio (320kbps)</h4>
-                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=audio&quality=320kbps</code>
-                            <p>Download audio in highest quality MP3 format (320kbps)</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>🎶 Download Audio (192kbps)</h4>
-                            <code>GET /api/download?url=https://youtu.be/VIDEO_ID&format=audio&quality=192kbps</code>
-                            <p>Download audio in standard quality MP3 format (192kbps)</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>📄 Download Information</h4>
-                            <code>GET /api/download-info?url=https://youtu.be/VIDEO_ID&format=video&quality=720p</code>
-                            <p>Get download information without actually downloading the file</p>
-                        </div>
-                    </div>
-
-                    <div class="api-endpoint">
-                        <h3>🎯 Available Video Qualities</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1rem 0;">
-                            <code>4k</code>
-                            <code>2160p</code>
-                            <code>1080p</code>
-                            <code>720p</code>
-                            <code>480p</code>
-                            <code>360p</code>
-                            <code>240p</code>
-                            <code>best</code>
-                            <code>worst</code>
-                        </div>
-                    </div>
-
-                    <div class="api-endpoint">
-                        <h3>🎵 Available Audio Qualities</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin: 1rem 0;">
-                            <code>320kbps</code>
-                            <code>256kbps</code>
-                            <code>192kbps</code>
-                            <code>128kbps</code>
-                            <code>96kbps</code>
-                            <code>64kbps</code>
-                        </div>
-                    </div>
-
-                    <div class="api-endpoint">
-                        <h3>💡 Real Working Examples</h3>
-                        <div class="endpoint">
-                            <h4>🎬 Download Rick Roll Video (720p)</h4>
-                            <code>GET /api/download?url=https://youtu.be/dQw4w9WgXcQ&format=video&quality=720p</code>
-                            <p>Download the famous Rick Roll video in 720p quality</p>
-                        </div>
-                        
-                        <div class="endpoint">
-                            <h4>🎵 Download Rick Roll Audio (320kbps)</h4>
-                            <code>GET /api/download?url=https://youtu.be/dQw4w9WgXcQ&format=audio&quality=320kbps</code>
-                            <p>Download Rick Roll audio in highest quality MP3</p>
-                        </div>
-                    </div>
-
-                    <div class="api-endpoint">
-                        <h3>⚠️ Important Notes</h3>
-                        <ul style="text-align: left; padding-left: 2rem; color: #666;">
-                            <li>✅ Files are automatically named with video title</li>
-                            <li>✅ Both short (youtu.be) and long (youtube.com) URLs supported</li>
-                            <li>✅ Audio files converted to MP3 format</li>
-                            <li>✅ Video files maintain original format (usually MP4)</li>
-                            <li>⚡ Files auto-delete after 60 seconds for security</li>
-                            <li>🚀 API supports CORS for web applications</li>
-                        </ul>
-                    </div>
+                <h2>🚀 API Available</h2>
+                <p>This YouTube downloader also provides a REST API for developers.</p>
+                <div class="api-quick-links">
+                    <a href="/api/info" target="_blank" class="api-link">📡 API Information</a>
+                    <a href="/api/formats" target="_blank" class="api-link">📋 Available Formats</a>
+                    <a href="https://github.com/sultan-arabi/yt-downloader" target="_blank" class="api-link">📖 Documentation</a>
                 </div>
             </div>
         </section>
